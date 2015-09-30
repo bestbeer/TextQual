@@ -18,7 +18,6 @@ public class pdfToText {
 	
 	public static int createTxtFile(String text, String fileName) throws IOException
 	{
-		
 		BufferedWriter writer = null;
 		try
 		{
