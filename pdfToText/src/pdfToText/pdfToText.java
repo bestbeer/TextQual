@@ -1,7 +1,8 @@
 package pdfToText;
 
 import java.io.*;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.text.Document;
 
@@ -46,6 +47,12 @@ public class pdfToText {
 			return 1;
 	}
 	
+	public static Map<String,String>  getFilesListToRead()
+	{
+		Map filesListMap = new HashMap(); 
+		//m1.put("Zara", "8");
+		return filesListMap;
+	}
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
