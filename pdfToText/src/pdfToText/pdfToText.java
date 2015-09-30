@@ -1,5 +1,6 @@
 package pdfToText;
 
+import java.io.*;
 import java.io.IOException;
 
 import javax.swing.text.Document;
@@ -11,7 +12,41 @@ import org.apache.pdfbox.searchengine.*;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 public class pdfToText {
-
+	String txtFilesDir = "C:\\TEMP\\text.pdf";
+	String pdfFilesDir = "C:\\TEMP\\text.pdf";
+	
+	public static int createTxtFile(String text, String fileName) throws IOException
+	{
+		
+		BufferedWriter writer = null;
+		try
+		{
+			writer = new BufferedWriter( new FileWriter( fileName));
+		    writer.write(text);	
+		}
+		catch ( IOException e)
+		{
+			throw e;
+		}
+		finally
+		{  
+			try
+		    {
+		        if ( writer != null)
+		        writer.close( );
+		    }
+		    catch ( IOException e)
+		    {
+		    	throw e;
+		    } 
+		}
+		if(writer==null) 
+			return -1;
+		else 
+			return 1;
+	}
+	
+	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		String s = new String();
