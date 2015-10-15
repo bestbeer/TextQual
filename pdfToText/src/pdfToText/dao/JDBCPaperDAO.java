@@ -47,18 +47,19 @@ public class JDBCPaperDAO implements PaperDAO{
 	 
 	    @Override
 	    public List<Paper> select() {
-	        List<Paper> persons = new LinkedList<Paper>();
+	        List<Paper> papers = new LinkedList<Paper>();
 	         try {
 	                Statement statement = connection.createStatement();
+	              //TODO add the stored procedure exec statement that will bring the list of papers
 	                ResultSet resultSet = statement.executeQuery("SELECT * FROM hmkcode.persons");
 	                 
 	                Paper paper = null;
 	                while(resultSet.next()){
-	                    paper = new Person();
-	                    paper.setName(Integer.parseInt(resultSet.getString("name")));
+	                    paper = new Paper();
+	                    paper.setName(resultSet.getString("name"));
 	                    paper.setHashedName(resultSet.getString("hashedName"));
 	                     
-	                    persons.add(paper);
+	                    papers.add(paper);
 	                }
 	                resultSet.close();
 	                statement.close();
@@ -66,8 +67,8 @@ public class JDBCPaperDAO implements PaperDAO{
 	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
-	            System.out.println(persons);
-	            return persons;
+	            System.out.println(papers);
+	            return papers;
 	    }
 	     
 	     
