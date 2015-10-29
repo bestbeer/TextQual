@@ -12,6 +12,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.searchengine.*;
 import org.apache.pdfbox.util.PDFTextStripper;
 
+import pdfToText.dao.*;
+import pdfToText.vo.Paper;
+
 public class pdfToText {
 	String txtFilesDir = "C:\\TEMP\\text.pdf";
 	String pdfFilesDir = "C:\\TEMP\\text.pdf";
@@ -55,12 +58,26 @@ public class pdfToText {
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String s = new String();
-		s = "C:\\TEMP\\text.pdf";
-		PDDocument pdfDocument = PDDocument.load(s);
-		PDFTextStripper stripper = new PDFTextStripper();
-		String s1 =  stripper.getText(pdfDocument);
-		pdfDocument.close();
+//		String s = new String();
+//		s = "C:\\TEMP\\text.pdf";
+//		PDDocument pdfDocument = PDDocument.load(s);
+//		PDFTextStripper stripper = new PDFTextStripper();
+//		String s1 =  stripper.getText(pdfDocument);
+//		pdfDocument.close();
+		
+		Paper paper = new Paper();
+		paper.setName("HMK");
+         
+        JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
+        jdbcPaperDAO.getConnection();
+        jdbcPaperDAO.insert(paper);
+         
+        paper.setName("Another Name");
+ 
+        jdbcPaperDAO.insert(person);
+         
+        jdbcPaperDAO.select();
+        jdbcPaperDAO.closeConnection();
 	}
 
 }
