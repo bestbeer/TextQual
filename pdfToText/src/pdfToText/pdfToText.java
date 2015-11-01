@@ -1,7 +1,9 @@
 package pdfToText;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.text.Document;
@@ -64,17 +66,15 @@ public class pdfToText {
 //		PDFTextStripper stripper = new PDFTextStripper();
 //		String s1 =  stripper.getText(pdfDocument);
 //		pdfDocument.close();
-		
+		List <Paper> PapersList = new ArrayList<Paper>();
 		Paper paper = new Paper();
 		paper.setName("HMK");
          
         JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
         jdbcPaperDAO.getConnection();
-        jdbcPaperDAO.insert(paper);
+        PapersList = jdbcPaperDAO.select();
          
-        paper.setName("Another Name");
- 
-        jdbcPaperDAO.insert(person);
+        
          
         jdbcPaperDAO.select();
         jdbcPaperDAO.closeConnection();
