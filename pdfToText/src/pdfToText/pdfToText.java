@@ -51,21 +51,64 @@ public class pdfToText {
 			return 1;
 	}
 	
-	public static Map<String,String>  getFilesListToRead()
+	public static List<Paper>  getFilesListToRead()
 	{
-		Map filesListMap = new HashMap(); 
+		List <Paper> PapersList = new ArrayList<Paper>();
+		JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
+        jdbcPaperDAO.getConnection();
+        PapersList = jdbcPaperDAO.select(); //here the logic of which files to read will be in sql query
+         
+        jdbcPaperDAO.closeConnection();
+        
+		//Map filesListMap = new HashMap(); 
 		//m1.put("Zara", "8");
-		return filesListMap;
+		return PapersList;
+	}
+	
+	public static String pdfFileToText(String path) throws IOException
+	{
+//		String path = new String();
+//		path = "C:\\TEMP\\text.pdf";
+		PDDocument pdfDocument = PDDocument.load(path);
+		PDFTextStripper stripper = new PDFTextStripper();
+		String text =  stripper.getText(pdfDocument);
+		pdfDocument.close();
+		return text;
+	}
+	
+	
+	public static int performConvertToText()
+	{
+		//will return 1 if succeed else 0
+		
+		//get the list of files to convert
+		String paperHashedName;
+		int result;
+		String text;
+		List<Paper> papersList = new ArrayList<Paper>();
+		papersList = getFilesListToRead();
+		
+		for (Paper p:papersList) //for each Paper in the list
+		{
+			paperHashedName = p.getHashedName();
+			try {
+				text = pdfFileToText(paperHashedName);
+			
+				result = createTxtFile(text,p.getName());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return 0;
+			}
+
+			
+		}
+		return 1;
+
 	}
 	
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-//		String s = new String();
-//		s = "C:\\TEMP\\text.pdf";
-//		PDDocument pdfDocument = PDDocument.load(s);
-//		PDFTextStripper stripper = new PDFTextStripper();
-//		String s1 =  stripper.getText(pdfDocument);
-//		pdfDocument.close();
+		
 		List <Paper> PapersList = new ArrayList<Paper>();
 		Paper paper = new Paper();
 		paper.setName("HMK");
@@ -74,9 +117,6 @@ public class pdfToText {
         jdbcPaperDAO.getConnection();
         PapersList = jdbcPaperDAO.select();
          
-        
-         
-        jdbcPaperDAO.select();
         jdbcPaperDAO.closeConnection();
 	}
 
