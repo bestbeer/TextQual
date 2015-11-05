@@ -18,8 +18,8 @@ public class JDBCPaperDAO implements PaperDAO{
 	        try {
 	            Class.forName("com.mysql.jdbc.Driver");
 	            if(connection == null)
-	                connection = DriverManager.getConnection("jdbc:mysql://localhost/hmkcode?user=root&password=");
-	 
+	                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/papers?user=root&password=admin");
+	 //TODO check the connection problem
 	        } catch (ClassNotFoundException e) {
 	 
 	            e.printStackTrace();
@@ -51,7 +51,7 @@ public class JDBCPaperDAO implements PaperDAO{
 	         try {
 	                Statement statement = connection.createStatement();
 	              //TODO add the stored procedure exec statement that will bring the list of papers
-	                ResultSet resultSet = statement.executeQuery("SELECT * FROM hmkcode.persons");
+	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.map_doi_md5 LIMIT 100;");
 	                 
 	                Paper paper = null;
 	                while(resultSet.next()){

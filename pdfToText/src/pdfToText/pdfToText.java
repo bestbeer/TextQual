@@ -82,6 +82,7 @@ public class pdfToText {
 		//will return 1 if succeed else 0
 		
 		//get the list of files to convert
+		int cnt = 0;
 		String paperHashedName;
 		int result;
 		String text;
@@ -95,6 +96,7 @@ public class pdfToText {
 				text = pdfFileToText(paperHashedName);
 			
 				result = createTxtFile(text,p.getName());
+				cnt++;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -103,21 +105,20 @@ public class pdfToText {
 
 			
 		}
-		return 1;
+		return cnt;
 
 	}
 	
 	public static void main(String[] args) throws IOException {
 		
-		List <Paper> PapersList = new ArrayList<Paper>();
-		Paper paper = new Paper();
-		paper.setName("HMK");
-         
-        JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
-        jdbcPaperDAO.getConnection();
-        PapersList = jdbcPaperDAO.select();
-         
-        jdbcPaperDAO.closeConnection();
+		int res = 0;
+		res = performConvertToText();
+		if(res != 0)
+		{
+			System.out.print("The program convert successfully  " + res + " documents"); 
+		}
+		else 
+			System.out.print("The program wasn't finish successfully  " + res); 
 	}
 
 }
