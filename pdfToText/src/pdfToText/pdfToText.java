@@ -1,14 +1,18 @@
 package pdfToText;
 
 import java.io.*;
+import java.util.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.text.Document;
 
 import org.apache.pdfbox.pdfparser.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.lucene.LucenePDFDocument.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.searchengine.*;
@@ -76,7 +80,25 @@ public class pdfToText {
 		return text;
 	}
 	
-	
+	public static String findAbsolutePath(String rootFolder, String fileName)
+	{
+		File root = new File(rootFolder);
+        String absolutePath = null;
+        try {
+            boolean recursive = true;
+
+            Collection files = FileUtils.listFiles(root, null, recursive);
+
+            for (Iterator iterator = files.iterator(); iterator.hasNext();) {
+                File file = (File) iterator.next();
+                if (file.getName().equals(fileName))
+                	absolutePath = file.getAbsolutePath();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return absolutePath;
+	}
 	public static int performConvertToText(String pdffilesPath, String txtFilesPath)
 	{
 		//will return 1 if succeed else 0
@@ -110,8 +132,8 @@ public class pdfToText {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String pdfFilesPath = "C:\\TEMP\\";
-		String txtFilesPath = "C:\\TEMP\\";
+		String pdfFilesPath = "G:\\Papers\\ACM\\ACM";
+		String txtFilesPath = "G:\\Papers\\ACM\\ACM_Text";
 		int res = 0;
 		res = performConvertToText(pdfFilesPath, txtFilesPath);
 		if(res != 0)

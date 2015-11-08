@@ -51,7 +51,7 @@ public class JDBCPaperDAO implements PaperDAO{
 	         try {
 	                Statement statement = connection.createStatement();
 	              //TODO add the stored procedure exec statement that will bring the list of papers
-	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.map_doi_md5 LIMIT 100;");
+	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.down_acm_md5 LIMIT 100;");
 	                 
 	                Paper paper = null;
 	                while(resultSet.next()){
