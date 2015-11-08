@@ -18,7 +18,7 @@ public class JDBCPaperDAO implements PaperDAO{
 	        try {
 	            Class.forName("com.mysql.jdbc.Driver");
 	            if(connection == null)
-	                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/papers?user=root&password=admin");
+	                connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/papers?user=root&password=admin");
 	 //TODO check the connection problem
 	        } catch (ClassNotFoundException e) {
 	 
@@ -56,8 +56,8 @@ public class JDBCPaperDAO implements PaperDAO{
 	                Paper paper = null;
 	                while(resultSet.next()){
 	                    paper = new Paper();
-	                    paper.setName(resultSet.getString("name"));
-	                    paper.setHashedName(resultSet.getString("hashedName"));
+	                    paper.setName(resultSet.getString("doi"));
+	                    paper.setHashedName(resultSet.getString("md5"));
 	                     
 	                    papers.add(paper);
 	                }

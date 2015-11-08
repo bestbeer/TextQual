@@ -77,7 +77,7 @@ public class pdfToText {
 	}
 	
 	
-	public static int performConvertToText()
+	public static int performConvertToText(String pdffilesPath, String txtFilesPath)
 	{
 		//will return 1 if succeed else 0
 		
@@ -87,13 +87,13 @@ public class pdfToText {
 		int result;
 		String text;
 		List<Paper> papersList = new ArrayList<Paper>();
-		papersList = getFilesListToRead();
+		papersList = getFilesListToRead(); //get files list from DB
 		
 		for (Paper p:papersList) //for each Paper in the list
 		{
 			paperHashedName = p.getHashedName();
 			try {
-				text = pdfFileToText(paperHashedName);
+				text = pdfFileToText(pdffilesPath + '\\'  + paperHashedName);
 			
 				result = createTxtFile(text,p.getName());
 				cnt++;
@@ -110,9 +110,10 @@ public class pdfToText {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		
+		String pdfFilesPath = "C:\\TEMP\\";
+		String txtFilesPath = "C:\\TEMP\\";
 		int res = 0;
-		res = performConvertToText();
+		res = performConvertToText(pdfFilesPath, txtFilesPath);
 		if(res != 0)
 		{
 			System.out.print("The program convert successfully  " + res + " documents"); 
