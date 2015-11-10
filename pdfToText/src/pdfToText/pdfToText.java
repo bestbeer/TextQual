@@ -25,12 +25,13 @@ public class pdfToText {
 	String txtFilesDir = "C:\\TEMP\\text.pdf";
 	String pdfFilesDir = "C:\\TEMP\\text.pdf";
 	
-	public static int createTxtFile(String text, String fileName) throws IOException
+	public static int createTxtFile(String text, String fileName, String path) throws IOException
 	{
 		BufferedWriter writer = null;
+		fileName = fileName.replaceAll("/", ".");
 		try
 		{
-			writer = new BufferedWriter( new FileWriter( fileName));
+			writer = new BufferedWriter( new FileWriter( path + "\\" + fileName + ".txt"));
 		    writer.write(text);	
 		}
 		catch ( IOException e)
@@ -91,7 +92,7 @@ public class pdfToText {
 
             for (Iterator iterator = files.iterator(); iterator.hasNext();) {
                 File file = (File) iterator.next();
-                if (file.getName().equals(fileName))
+                if (file.getName().equals(fileName + ".pdf" ))
                 	absolutePath = file.getAbsolutePath();
             }
         } catch (Exception e) {
@@ -99,13 +100,15 @@ public class pdfToText {
         }
         return absolutePath;
 	}
+	
 	public static int performConvertToText(String pdffilesPath, String txtFilesPath)
 	{
-		//will return 1 if succeed else 0
+		//will return number of files that were converted if succeed else 0
 		
 		//get the list of files to convert
 		int cnt = 0;
 		String paperHashedName;
+		String absoluteFilePath;
 		int result;
 		String text;
 		List<Paper> papersList = new ArrayList<Paper>();
@@ -114,18 +117,21 @@ public class pdfToText {
 		for (Paper p:papersList) //for each Paper in the list
 		{
 			paperHashedName = p.getHashedName();
-			try {
-				text = pdfFileToText(pdffilesPath + '\\'  + paperHashedName);
-			
-				result = createTxtFile(text,p.getName());
-				cnt++;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return 0;
-			}
+			absoluteFilePath = findAbsolutePath(pdffilesPath,paperHashedName);
+			if (absoluteFilePath!=null)
+			{
+				try {
+					text = pdfFileToText(absoluteFilePath);
+				
+					result = createTxtFile(text,p.getName(),txtFilesPath);
+					cnt++;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return 0;
+				}
 
-			
+			}
 		}
 		return cnt;
 
