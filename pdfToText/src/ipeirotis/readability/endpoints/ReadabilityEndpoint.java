@@ -28,5 +28,17 @@ public class ReadabilityEndpoint {
 
         return result;
     }
+    
+    public String readTxtFile(String filePath)
+    {
+    	return "";
+    }
+    
+    public void writeToDbReadability (String dirPath)
+    {
+    	//will read all the txt files in the dir and write to the DB Table the readability results per DOI
+    }
+    
+    
 
 }
