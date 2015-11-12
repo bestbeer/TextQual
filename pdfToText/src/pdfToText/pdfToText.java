@@ -81,6 +81,7 @@ public class pdfToText {
 		return text;
 	}
 	
+<<<<<<< HEAD
 	public static String findAbsolutePath(String rootFolder, String fileName)
 	{
 		File root = new File(rootFolder);
@@ -134,10 +135,41 @@ public class pdfToText {
 			}
 		}
 		return cnt;
+=======
+	
+	public static int performConvertToText()
+	{
+		//will return 1 if succeed else 0
+		
+		//get the list of files to convert
+		String paperHashedName;
+		int result;
+		String text;
+		List<Paper> papersList = new ArrayList<Paper>();
+		papersList = getFilesListToRead();
+		
+		for (Paper p:papersList) //for each Paper in the list
+		{
+			paperHashedName = p.getHashedName();
+			try {
+				text = pdfFileToText(paperHashedName);
+			
+				result = createTxtFile(text,p.getName());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return 0;
+			}
+
+			
+		}
+		return 1;
+>>>>>>> refs/remotes/origin/roman
 
 	}
 	
 	public static void main(String[] args) throws IOException {
+<<<<<<< HEAD
 		String pdfFilesPath = "G:\\Papers\\ACM\\ACM";
 		String txtFilesPath = "G:\\Papers\\ACM\\ACM_Text";
 		int res = 0;
@@ -148,6 +180,18 @@ public class pdfToText {
 		}
 		else 
 			System.out.print("The program wasn't finish successfully  " + res); 
+=======
+		
+		List <Paper> PapersList = new ArrayList<Paper>();
+		Paper paper = new Paper();
+		paper.setName("HMK");
+         
+        JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
+        jdbcPaperDAO.getConnection();
+        PapersList = jdbcPaperDAO.select();
+         
+        jdbcPaperDAO.closeConnection();
+>>>>>>> refs/remotes/origin/roman
 	}
 
 }
