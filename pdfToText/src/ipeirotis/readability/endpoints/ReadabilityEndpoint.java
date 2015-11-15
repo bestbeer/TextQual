@@ -1,5 +1,8 @@
 package ipeirotis.readability.endpoints;
 
+
+import pdfToText.dao.*;
+import pdfToText.vo.Paper;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +37,10 @@ public class ReadabilityEndpoint {
     	return "";
     }
     
-    public void writeToDbReadability (String dirPath)
+    public void writeToDbReadability (Map<MetricType, BigDecimal> readabilityMetrics, String doi)
     {
     	//will read all the txt files in the dir and write to the DB Table the readability results per DOI
+    	
     }
     
     
