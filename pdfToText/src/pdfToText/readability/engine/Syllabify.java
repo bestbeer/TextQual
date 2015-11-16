@@ -1,4 +1,4 @@
-package ipeirotis.readability.engine;
+package pdfToText.readability.engine;
 
 /*
  * Created on Jun 5, 2007

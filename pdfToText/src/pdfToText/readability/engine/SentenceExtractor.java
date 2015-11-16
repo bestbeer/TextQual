@@ -1,4 +1,4 @@
-package ipeirotis.readability.engine;
+package pdfToText.readability.engine;
 
 import java.util.ArrayList;
 

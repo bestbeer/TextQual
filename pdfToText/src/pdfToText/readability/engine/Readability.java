@@ -1,8 +1,8 @@
-package ipeirotis.readability.engine;
+package pdfToText.readability.engine;
 
 import java.math.BigDecimal;
 
-import ipeirotis.readability.enums.MetricType;
+import pdfToText.readability.enums.MetricType;
 
 /**
  * Implements various readability indexes

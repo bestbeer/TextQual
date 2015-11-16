@@ -1,19 +1,13 @@
-package ipeirotis.readability.endpoints;
+package pdfToTex.readability.endpoints;
 
 
 import pdfToText.dao.*;
+import pdfToText.readability.engine.Readability;
+import pdfToText.readability.enums.MetricType;
 import pdfToText.vo.Paper;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-
-//import javax.inject.Named;
-
-//import google.api.server.spi.config.Api;
-//import google.api.server.spi.config.ApiMethod;
-//import google.api.server.spi.config.ApiMethod.HttpMethod;
-import ipeirotis.readability.engine.Readability;
-import ipeirotis.readability.enums.MetricType;
 
 
 public class ReadabilityEndpoint {
