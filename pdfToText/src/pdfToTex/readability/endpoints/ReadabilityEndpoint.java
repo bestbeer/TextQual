@@ -1,7 +1,8 @@
 package pdfToTex.readability.endpoints;
 
 
-import pdfToText.dao.*;
+import pdfToText.pdfToText;
+import pdfToText.dao.JDBCPaperDAO;
 import pdfToText.readability.engine.Readability;
 import pdfToText.readability.enums.MetricType;
 import pdfToText.vo.Paper;
@@ -51,7 +52,14 @@ public class ReadabilityEndpoint {
     	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
     	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
     	
-    	insertLingQual(PaperLingQual paperLingQual)
+    	
+    	JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
+        jdbcPaperDAO.getConnection();
+        jdbcPaperDAO.insertLingQual(paperLingQual); //here the logic of which files to read will be in sql query //TODO add result good and fault result
+         
+        jdbcPaperDAO.closeConnection();
+        
+    	
     	
     }
     
