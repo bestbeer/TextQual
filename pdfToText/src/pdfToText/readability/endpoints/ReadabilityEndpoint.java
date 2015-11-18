@@ -1,4 +1,4 @@
-package pdfToTex.readability.endpoints;
+package pdfToText.readability.endpoints;
 
 
 import pdfToText.pdfToText;

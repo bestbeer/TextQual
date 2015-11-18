@@ -1,6 +1,7 @@
 package pdfToText;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,9 @@ import org.apache.pdfbox.util.PDFTextStripper;
 
 import pdfToText.dao.*;
 import pdfToText.vo.Paper;
+
+import pdfToText.readability.endpoints.*;
+import pdfToText.readability.enums.MetricType;
 
 public class pdfToText {
 	String txtFilesDir = "C:\\TEMP\\text.pdf";
@@ -114,6 +118,9 @@ public class pdfToText {
 		List<Paper> papersList = new ArrayList<Paper>();
 		papersList = getFilesListToRead(); //get files list from DB
 		
+		ReadabilityEndpoint readability = new ReadabilityEndpoint();
+		
+		Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
 		for (Paper p:papersList) //for each Paper in the list
 		{
 			paperHashedName = p.getHashedName();
@@ -122,7 +129,11 @@ public class pdfToText {
 			{
 				try {
 					text = pdfFileToText(absoluteFilePath);
-				
+					
+					read_metrics = readability.get(text);
+					
+					readability.writeToDbReadability(read_metrics, p.getName());
+					
 					result = createTxtFile(text,p.getName(),txtFilesPath);
 					cnt++;
 				} catch (IOException e) {
