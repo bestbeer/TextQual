@@ -276,10 +276,21 @@ public class Readability {
 	}
 
 	private static Double round(double d, int decimalPlace) {
+		BigDecimal bd;
+		try
+		{
 		// see the Javadoc about why we use a String in the constructor
 		// http://java.sun.com/j2se/1.5.0/docs/api/java/math/BigDecimal.html#BigDecimal(double)
-		BigDecimal bd = new BigDecimal(Double.toString(d));
+		bd = new BigDecimal(Double.toString(d));
 		bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Error when trying to init and then round BigDecimal with : " + Double.toString(d));
+			throw e;
+		}
+		
 		return bd.doubleValue();
 	}
 } 

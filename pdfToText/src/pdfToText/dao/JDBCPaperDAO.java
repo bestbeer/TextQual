@@ -49,19 +49,19 @@ public class JDBCPaperDAO implements PaperDAO{
 	    public void insertLingQual(PaperLingQual paperLingQual) {
 	        try {
 	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.lexical_quality (doi ,smog, flesch_reading, flesch_kincaid, ari, gunning_fog, coleman_liau, smog_index, characters, syllables, words, complexwords, sentences) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)");
-	            preparedStatement.setString(0,  paperLingQual.getDoi());
-	            preparedStatement.setDouble(1,  paperLingQual.getSMOG());
-	            preparedStatement.setDouble(2,  paperLingQual.getFLESCH_READING());
-	            preparedStatement.setDouble(3,  paperLingQual.getFLESCH_KINCAID());
-	            preparedStatement.setDouble(4,  paperLingQual.getARI());
-	            preparedStatement.setDouble(5,  paperLingQual.getGUNNING_FOG());
-	            preparedStatement.setDouble(6,  paperLingQual.getCOLEMAN_LIAU());
-	            preparedStatement.setDouble(7,  paperLingQual.getSMOG_INDEX());
-	            preparedStatement.setInt(8,  paperLingQual.getCHARACTERS());
-	            preparedStatement.setInt(9,  paperLingQual.getSYLLABLES());
-	            preparedStatement.setInt(10,  paperLingQual.getWORDS());
-	            preparedStatement.setInt(11,  paperLingQual.getCOMPLEXWORDS());
-	            preparedStatement.setInt(12,  paperLingQual.getSENTENCES());
+	            preparedStatement.setString(1,  paperLingQual.getDoi());
+	            preparedStatement.setDouble(2,  paperLingQual.getSMOG());
+	            preparedStatement.setDouble(3,  paperLingQual.getFLESCH_READING());
+	            preparedStatement.setDouble(4,  paperLingQual.getFLESCH_KINCAID());
+	            preparedStatement.setDouble(5,  paperLingQual.getARI());
+	            preparedStatement.setDouble(6,  paperLingQual.getGUNNING_FOG());
+	            preparedStatement.setDouble(7,  paperLingQual.getCOLEMAN_LIAU());
+	            preparedStatement.setDouble(8,  paperLingQual.getSMOG_INDEX());
+	            preparedStatement.setInt(9,  paperLingQual.getCHARACTERS());
+	            preparedStatement.setInt(10,  paperLingQual.getSYLLABLES());
+	            preparedStatement.setInt(11,  paperLingQual.getWORDS());
+	            preparedStatement.setInt(12,  paperLingQual.getCOMPLEXWORDS());
+	            preparedStatement.setInt(13,  paperLingQual.getSENTENCES());
 	            
 	            preparedStatement.executeUpdate();
 	            preparedStatement.close();

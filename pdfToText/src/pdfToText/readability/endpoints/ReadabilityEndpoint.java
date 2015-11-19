@@ -43,14 +43,14 @@ public class ReadabilityEndpoint {
     	paperLingQual.setCHARACTERS(readabilityMetrics.get(MetricType.CHARACTERS).intValue());
     	paperLingQual.setCOLEMAN_LIAU(readabilityMetrics.get(MetricType.COLEMAN_LIAU).doubleValue());
     	paperLingQual.setCOMPLEXWORDS(readabilityMetrics.get(MetricType.COMPLEXWORDS).intValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
-    	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
+    	paperLingQual.setFLESCH_KINCAID(readabilityMetrics.get(MetricType.FLESCH_KINCAID).doubleValue());
+    	paperLingQual.setFLESCH_READING(readabilityMetrics.get(MetricType.FLESCH_READING).doubleValue());
+    	paperLingQual.setGUNNING_FOG(readabilityMetrics.get(MetricType.GUNNING_FOG).doubleValue());
+    	paperLingQual.setSENTENCES(readabilityMetrics.get(MetricType.SENTENCES).intValue());
+    	paperLingQual.setSMOG(readabilityMetrics.get(MetricType.SMOG).doubleValue());
+    	paperLingQual.setSMOG_INDEX(readabilityMetrics.get(MetricType.SMOG_INDEX).doubleValue());
+    	paperLingQual.setSYLLABLES(readabilityMetrics.get(MetricType.SYLLABLES).intValue());
+    	paperLingQual.setWORDS(readabilityMetrics.get(MetricType.WORDS).intValue());
     	
     	
     	JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();

@@ -139,6 +139,7 @@ public class pdfToText {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					System.out.println("The error occured when trying process doc with name: " + p.getName() );
 					return 0;
 				}
 
