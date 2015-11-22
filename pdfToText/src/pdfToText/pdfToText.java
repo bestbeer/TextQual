@@ -17,7 +17,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.lucene.LucenePDFDocument.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.searchengine.*;
-import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.*;
 
 import pdfToText.dao.*;
 import pdfToText.vo.Paper;
@@ -74,11 +75,11 @@ public class pdfToText {
 		return PapersList;
 	}
 	
-	public static String pdfFileToText(String path) throws IOException
+	public static String pdfFileToText(File file) throws IOException
 	{
 //		String path = new String();
 //		path = "C:\\TEMP\\text.pdf";
-		PDDocument pdfDocument = PDDocument.load(path);
+		PDDocument pdfDocument = PDDocument.load(file);
 		PDFTextStripper stripper = new PDFTextStripper();
 		String text =  stripper.getText(pdfDocument);
 		pdfDocument.close();
@@ -125,22 +126,30 @@ public class pdfToText {
 		{
 			paperHashedName = p.getHashedName();
 			absoluteFilePath = findAbsolutePath(pdffilesPath,paperHashedName);
+			File file = new File(absoluteFilePath);
 			if (absoluteFilePath!=null)
 			{
 				try {
-					text = pdfFileToText(absoluteFilePath);
-					
+					text = pdfFileToText(file);
+					if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
+					{
 					read_metrics = readability.get(text);
 					
 					readability.writeToDbReadability(read_metrics, p.getName());
 					
 					result = createTxtFile(text,p.getName(),txtFilesPath);
 					cnt++;
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					System.out.println("The error occured when trying process doc with name: " + p.getName() );
 					return 0;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					System.out.println("The error occured when trying process doc with name: " + p.getName() );
 				}
 
 			}
@@ -151,7 +160,7 @@ public class pdfToText {
 	
 	public static void main(String[] args) throws IOException {
 		String pdfFilesPath = "G:\\Papers\\ACM\\ACM";
-		String txtFilesPath = "G:\\Papers\\ACM\\ACM_Text";
+		String txtFilesPath = "G:\\Papers\\ACM_Text";
 		int res = 0;
 		res = performConvertToText(pdfFilesPath, txtFilesPath);
 		if(res != 0)
