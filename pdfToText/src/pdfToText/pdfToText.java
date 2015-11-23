@@ -80,14 +80,18 @@ public class pdfToText {
 //		String path = new String();
 //		path = "C:\\TEMP\\text.pdf";
 		String text = null;
+		PDDocument pdfDocument = null;
+		PDFTextStripper stripper = new PDFTextStripper();;
 		try
 		{ 
-		PDDocument pdfDocument = PDDocument.load(file);
-		PDFTextStripper stripper = new PDFTextStripper();
+			pdfDocument = PDDocument.load(file);
+			
 		}
 		catch(Exception e)
 		{
 			//TODO: add catch block to process crushes when can't load pdf files at all
+			System.out.println("ERROR: There was a problem to read pdf file: " + file.getName() + "with DOI: " + doi);
+			System.out.println(e.getMessage());
 		}
 		
 		try
