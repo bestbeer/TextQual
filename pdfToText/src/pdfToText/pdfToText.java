@@ -75,13 +75,23 @@ public class pdfToText {
 		return PapersList;
 	}
 	
-	public static String pdfFileToText(File file) throws IOException
+	public static String pdfFileToText(File file, String doi) throws IOException
 	{
 //		String path = new String();
 //		path = "C:\\TEMP\\text.pdf";
+		String text = null;
 		PDDocument pdfDocument = PDDocument.load(file);
 		PDFTextStripper stripper = new PDFTextStripper();
-		String text =  stripper.getText(pdfDocument);
+		try
+		{
+			text =  stripper.getText(pdfDocument);
+		}
+		catch(IOException e)
+		{
+			System.out.println("ERROR: There was a problem to convert pdf file to text check next file: " + file.getName() + "with DOI: " + doi);
+			System.out.println(e.getMessage());
+			
+		}
 		pdfDocument.close();
 		return text;
 	}
@@ -130,7 +140,7 @@ public class pdfToText {
 			if (absoluteFilePath!=null)
 			{
 				try {
-					text = pdfFileToText(file);
+					text = pdfFileToText(file, p.getName());
 					if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
 					{
 					read_metrics = readability.get(text);
@@ -160,7 +170,7 @@ public class pdfToText {
 	
 	public static void main(String[] args) throws IOException {
 		String pdfFilesPath = "G:\\Papers\\ACM\\ACM";
-		String txtFilesPath = "G:\\Papers\\ACM_Text";
+		String txtFilesPath = "G:\\Papers\\ACM_Text2";
 		int res = 0;
 		res = performConvertToText(pdfFilesPath, txtFilesPath);
 		if(res != 0)
