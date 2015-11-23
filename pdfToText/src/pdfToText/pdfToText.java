@@ -80,8 +80,16 @@ public class pdfToText {
 //		String path = new String();
 //		path = "C:\\TEMP\\text.pdf";
 		String text = null;
+		try
+		{ 
 		PDDocument pdfDocument = PDDocument.load(file);
 		PDFTextStripper stripper = new PDFTextStripper();
+		}
+		catch(Exception e)
+		{
+			//TODO: add catch block to process crushes when can't load pdf files at all
+		}
+		
 		try
 		{
 			text =  stripper.getText(pdfDocument);
