@@ -78,7 +78,7 @@ public class JDBCPaperDAO implements PaperDAO{
 	         try {
 	                Statement statement = connection.createStatement();
 	              //TODO add the stored procedure exec statement that will bring the list of papers
-	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.down_acm_md5;");
+	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.down_ieee_md5;"); //here we will put relevant view to select from in order to select list of downloaded papers for our specific directory - not all files were downloaded so we not processed not downloaded files 
 	                 
 	                Paper paper = null;
 	                while(resultSet.next()){

@@ -27,8 +27,7 @@ import pdfToText.readability.endpoints.*;
 import pdfToText.readability.enums.MetricType;
 
 public class pdfToText {
-	String txtFilesDir = "C:\\TEMP\\text.pdf";
-	String pdfFilesDir = "C:\\TEMP\\text.pdf";
+	
 	
 	public static int createTxtFile(String text, String fileName, String path) throws IOException
 	{
@@ -108,14 +107,14 @@ public class pdfToText {
 		return text;
 	}
 	
-	public static String findAbsolutePath(String rootFolder, String fileName)
+	public static String findAbsolutePath(Collection files, String fileName)
 	{
-		File root = new File(rootFolder);
+		//File root = new File(rootFolder);
         String absolutePath = null;
         try {
-            boolean recursive = true;
+            //boolean recursive = true;
 
-            Collection files = FileUtils.listFiles(root, null, recursive);
+            //Collection files = FileUtils.listFiles(root, null, recursive);
 
             for (Iterator iterator = files.iterator(); iterator.hasNext();) {
                 File file = (File) iterator.next();
@@ -141,13 +140,19 @@ public class pdfToText {
 		List<Paper> papersList = new ArrayList<Paper>();
 		papersList = getFilesListToRead(); //get files list from DB
 		
+		File root = new File(pdffilesPath);
+		boolean recursive = true;
+		Collection files = FileUtils.listFiles(root, null, recursive);
+		
+		
 		ReadabilityEndpoint readability = new ReadabilityEndpoint();
 		
 		Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
 		for (Paper p:papersList) //for each Paper in the list
 		{
 			paperHashedName = p.getHashedName();
-			absoluteFilePath = findAbsolutePath(pdffilesPath,paperHashedName);
+			
+			absoluteFilePath = findAbsolutePath(files,paperHashedName);
 			File file = new File(absoluteFilePath);
 			if (absoluteFilePath!=null)
 			{
@@ -181,8 +186,12 @@ public class pdfToText {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String pdfFilesPath = "G:\\Papers\\ACM\\ACM";
-		String txtFilesPath = "G:\\Papers\\ACM_Text2";
+		
+		
+		String pdfFilesPath = "G:\\Papers\\IEEE_PAPERS_TILL_2007";
+		String txtFilesPath = "G:\\Papers\\IEEE_Till_2007_Text";
+		
+		
 		int res = 0;
 		res = performConvertToText(pdfFilesPath, txtFilesPath);
 		if(res != 0)
