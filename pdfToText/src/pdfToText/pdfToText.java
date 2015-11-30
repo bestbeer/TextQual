@@ -33,6 +33,8 @@ public class pdfToText {
 	{
 		BufferedWriter writer = null;
 		fileName = fileName.replaceAll("/", ".");
+		fileName = fileName.replaceAll("<", ".");
+		fileName = fileName.replaceAll(">", ".");
 		try
 		{
 			writer = new BufferedWriter( new FileWriter( path + "\\" + fileName + ".txt"));
@@ -188,8 +190,8 @@ public class pdfToText {
 	public static void main(String[] args) throws IOException {
 		
 		
-		String pdfFilesPath = "G:\\Papers\\IEEE_PAPERS_TILL_2007";
-		String txtFilesPath = "G:\\Papers\\IEEE_Till_2007_Text";
+		String pdfFilesPath = "G:\\Papers\\Journals";
+		String txtFilesPath = "G:\\Papers\\Journals_Text";
 		
 		
 		int res = 0;
