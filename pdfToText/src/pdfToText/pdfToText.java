@@ -35,6 +35,7 @@ public class pdfToText {
 		fileName = fileName.replaceAll("/", ".");
 		fileName = fileName.replaceAll("<", ".");
 		fileName = fileName.replaceAll(">", ".");
+		fileName = fileName.replaceAll(":", ".");
 		try
 		{
 			writer = new BufferedWriter( new FileWriter( path + "\\" + fileName + ".txt"));
