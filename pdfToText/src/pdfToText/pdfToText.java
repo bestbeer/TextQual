@@ -130,8 +130,19 @@ public class pdfToText {
         return absolutePath;
 	}
 	
+	public static int countCommas(String text)
+	{
+		int commas = 0;
+		for(int i = 0; i < text.length(); i++) {
+		    if(text.charAt(i) == ',') commas++;
+		}
+		
+		return commas;
+	}
+	
 	public static int performConvertToText(String pdffilesPath, String txtFilesPath)
 	{
+		//will convert to text and calculate the metrics and save them
 		//will return number of files that were converted if succeed else 0
 		
 		//get the list of files to convert
@@ -140,6 +151,10 @@ public class pdfToText {
 		String absoluteFilePath;
 		int result;
 		String text;
+		int commas;
+		
+		
+		
 		List<Paper> papersList = new ArrayList<Paper>();
 		papersList = getFilesListToRead(); //get files list from DB
 		
@@ -151,41 +166,53 @@ public class pdfToText {
 		ReadabilityEndpoint readability = new ReadabilityEndpoint();
 		
 		Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
+		
+		
 		for (Paper p:papersList) //for each Paper in the list
 		{
+			try {
 			paperHashedName = p.getHashedName();
 			
 			absoluteFilePath = findAbsolutePath(files,paperHashedName);
 			File file = new File(absoluteFilePath);
 			if (absoluteFilePath!=null)
 			{
-				try {
+				
 					text = pdfFileToText(file, p.getName());
 					if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
 					{
+						//readability metrics calculation
 					read_metrics = readability.get(text);
 					
+					
+						//write readability metrics to db
 					readability.writeToDbReadability(read_metrics, p.getName());
+					
+						//count commas
+					commas = countCommas(text);
+					//TODO write to db the commas count
 					
 					result = createTxtFile(text,p.getName(),txtFilesPath);
 					cnt++;
 					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.println("The error occured when trying process doc with name: " + p.getName() );
-					return 0;
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					System.out.println("The error occured when trying process doc with name: " + p.getName() );
-				}
+				
 
+			}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("The error occured when trying process doc with name: " + p.getName() );
+				return 0;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("The error occured when trying process doc with name: " + p.getName() );
 			}
 		}
 		return cnt;
 
+		
 	}
 	
 	public static void main(String[] args) throws IOException {
