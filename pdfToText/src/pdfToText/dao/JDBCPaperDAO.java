@@ -48,7 +48,7 @@ public class JDBCPaperDAO implements PaperDAO{
 	    @Override
 	    public void insertLingQual(PaperLingQual paperLingQual) {
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.lexical_quality (doi ,smog, flesch_reading, flesch_kincaid, ari, gunning_fog, coleman_liau, smog_index, characters, syllables, words, complexwords, sentences) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)");
+	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.lexical_quality (doi ,smog, flesch_reading, flesch_kincaid, ari, gunning_fog, coleman_liau, smog_index, characters, syllables, words, complexwords, sentences, commas) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)");
 	            preparedStatement.setString(1,  paperLingQual.getDoi());
 	            preparedStatement.setDouble(2,  paperLingQual.getSMOG());
 	            preparedStatement.setDouble(3,  paperLingQual.getFLESCH_READING());
@@ -62,6 +62,7 @@ public class JDBCPaperDAO implements PaperDAO{
 	            preparedStatement.setInt(11,  paperLingQual.getWORDS());
 	            preparedStatement.setInt(12,  paperLingQual.getCOMPLEXWORDS());
 	            preparedStatement.setInt(13,  paperLingQual.getSENTENCES());
+	            preparedStatement.setInt(14,  paperLingQual.getCOMMAS());
 	            
 	            preparedStatement.executeUpdate();
 	            preparedStatement.close();

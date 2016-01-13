@@ -15,6 +15,7 @@ public class PaperLingQual {
 	int WORDS;
 	int COMPLEXWORDS;
 	int SENTENCES;
+	int COMMAS;
 	
 	public String getDoi() {
 		return doi;
@@ -95,6 +96,13 @@ public class PaperLingQual {
 		SENTENCES = sENTENCES;
 	}
 	
+	public int getCOMMAS() {
+		return COMMAS;
+	}
+	
+	public void setCOMMAS(int cOMMAS) {
+		COMMAS = cOMMAS;
+	}
 	
 
 }

@@ -51,7 +51,7 @@ public class ReadabilityEndpoint {
     	paperLingQual.setSMOG_INDEX(readabilityMetrics.get(MetricType.SMOG_INDEX).doubleValue());
     	paperLingQual.setSYLLABLES(readabilityMetrics.get(MetricType.SYLLABLES).intValue());
     	paperLingQual.setWORDS(readabilityMetrics.get(MetricType.WORDS).intValue());
-    	
+    	paperLingQual.setCOMMAS(readabilityMetrics.get(MetricType.COMMAS).intValue());
     	
     	JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
         jdbcPaperDAO.getConnection();

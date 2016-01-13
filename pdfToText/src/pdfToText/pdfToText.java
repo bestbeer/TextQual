@@ -189,7 +189,7 @@ public class pdfToText {
 					readability.writeToDbReadability(read_metrics, p.getName());
 					
 						//count commas
-					commas = countCommas(text);
+					//commas = countCommas(text);
 					//TODO write to db the commas count
 					
 					result = createTxtFile(text,p.getName(),txtFilesPath);
@@ -218,8 +218,8 @@ public class pdfToText {
 	public static void main(String[] args) throws IOException {
 		
 		
-		String pdfFilesPath = "G:\\Papers\\Journals";
-		String txtFilesPath = "G:\\Papers\\Journals_Text";
+		String pdfFilesPath = "G:\\Papers\\Journals\\journals\\Programming Languages";
+		String txtFilesPath = "G:\\Papers\\Test_text";
 		
 		
 		int res = 0;

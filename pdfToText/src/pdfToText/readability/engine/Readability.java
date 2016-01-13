@@ -23,6 +23,8 @@ public class Readability {
 	Integer syllables;
 
 	Integer characters;
+	
+	Integer commas;
 
 	public double getMetric(MetricType t) throws IllegalArgumentException {
 
@@ -51,6 +53,8 @@ public class Readability {
 			return getComplex();
 		case SENTENCES:
 			return getSentences();
+		case COMMAS:
+			return getCommas();
 
 		default:
 			throw new IllegalArgumentException("Readability Metric '"
@@ -77,6 +81,11 @@ public class Readability {
 	private int getWords() {
 		return words;
 	}
+	
+	private int getCommas()
+	{
+		return commas;
+	}
 
 	public Readability(String text) {
 
@@ -87,6 +96,7 @@ public class Readability {
 		this.words = getNumberOfWords(text);
 		this.syllables = getNumberOfSyllables(text);
 		this.characters = getNumberOfCharacters(text);
+		this.commas = getNumberOfCommas(text);
 
 	}
 
@@ -116,7 +126,21 @@ public class Readability {
 		}
 		return characters;
 	}
-
+	
+	/**
+	 * Returns the number of commas in the text
+	 * @param text
+	 * @return
+	 */
+	public static int getNumberOfCommas(String text)
+	{
+		int commas = 0;
+		for(int i = 0; i < text.length(); i++) {
+		    if(text.charAt(i) == ',') commas++;
+		}
+		
+		return commas;
+	}
 	/**
 	 * Returns the number of words with 3 or more syllables
 	 * 
