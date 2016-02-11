@@ -110,6 +110,7 @@ public class pdfToText {
 		return text;
 	}
 	
+	
 	public static String findAbsolutePath(Collection files, String fileName)
 	{
 		//File root = new File(rootFolder);
@@ -140,90 +141,148 @@ public class pdfToText {
 		return commas;
 	}
 	
-	public static int performConvertToText(String pdffilesPath, String txtFilesPath)
+	/** Converts files from pdf to text by path, hashedNames will idicate if the names of the pdf files are appeared in MD5 hash or false if regular names */
+	public static int performConvertToText(String pdffilesPath, String txtFilesPath, boolean hashedNames)
 	{
+		
 		//will convert to text and calculate the metrics and save them
 		//will return number of files that were converted if succeed else 0
 		
 		//get the list of files to convert
 		int cnt = 0;
 		String paperHashedName;
+		String paperName;
 		String absoluteFilePath;
 		int result;
 		String text;
 		int commas;
 		
 		
-		
-		List<Paper> papersList = new ArrayList<Paper>();
-		papersList = getFilesListToRead(); //get files list from DB
-		
-		File root = new File(pdffilesPath);
-		boolean recursive = true;
-		Collection files = FileUtils.listFiles(root, null, recursive);
-		
-		
-		ReadabilityEndpoint readability = new ReadabilityEndpoint();
-		
-		Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
-		
-		
-		for (Paper p:papersList) //for each Paper in the list
+		if(hashedNames) //if our files are appeared with md5 hashed names
 		{
-			try {
-			paperHashedName = p.getHashedName();
+			List<Paper> papersList = new ArrayList<Paper>();
+			papersList = getFilesListToRead(); //get files list from DB
 			
-			absoluteFilePath = findAbsolutePath(files,paperHashedName);
-			File file = new File(absoluteFilePath);
-			if (absoluteFilePath!=null)
+			File root = new File(pdffilesPath);
+			boolean recursive = true;
+			Collection <File> files = FileUtils.listFiles(root, null, recursive);
+			
+			
+			ReadabilityEndpoint readability = new ReadabilityEndpoint();
+			
+			Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
+			
+			
+			for (Paper p:papersList) //for each Paper in the list
 			{
+				try {
+				paperHashedName = p.getHashedName();
 				
-					text = pdfFileToText(file, p.getName());
-					if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
-					{
-						//readability metrics calculation
-					read_metrics = readability.get(text);
+				absoluteFilePath = findAbsolutePath(files,paperHashedName);
+				File file = new File(absoluteFilePath);
+				if (absoluteFilePath!=null)
+				{
 					
+						text = pdfFileToText(file, p.getName());
+						if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
+						{
+							//readability metrics calculation
+						read_metrics = readability.get(text);
+						
+						
+							//write readability metrics to db
+						readability.writeToDbReadability(read_metrics, p.getName());
+						
+							//count commas
+						//commas = countCommas(text);
+						//TODO write to db the commas count
+						
+						result = createTxtFile(text,p.getName(),txtFilesPath);
+						cnt++;
+						}
 					
-						//write readability metrics to db
-					readability.writeToDbReadability(read_metrics, p.getName());
-					
-						//count commas
-					//commas = countCommas(text);
-					//TODO write to db the commas count
-					
-					result = createTxtFile(text,p.getName(),txtFilesPath);
-					cnt++;
-					}
+	
+				}
 				
-
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("The error occured when trying process doc with name: " + p.getName() );
+					return 0;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					System.out.println("The error occured when trying process doc with name: " + p.getName() );
+				}
 			}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("The error occured when trying process doc with name: " + p.getName() );
-				return 0;
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				System.out.println("The error occured when trying process doc with name: " + p.getName() );
-			}
+			return cnt;
 		}
-		return cnt;
-
+		//TODO end the creating of txt file from pdf without DB list and hashed names -  below
+		else
+		{
+			File root = new File(pdffilesPath);
+			boolean recursive = true;
+			Collection <File> files = FileUtils.listFiles(root, null, recursive);
+			
+			for (File f:files) //for each PDF in the list
+			{
+				try {
+				paperName = p.getHashedName();
+				
+				absoluteFilePath = findAbsolutePath(files,paperHashedName);
+				File file = new File(absoluteFilePath);
+				if (absoluteFilePath!=null)
+				{
+					
+						text = pdfFileToText(file, p.getName());
+						if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
+						{
+							//readability metrics calculation
+						read_metrics = readability.get(text);
+						
+						
+							//write readability metrics to db
+						readability.writeToDbReadability(read_metrics, p.getName());
+						
+							//count commas
+						//commas = countCommas(text);
+						//TODO write to db the commas count
+						
+						result = createTxtFile(text,p.getName(),txtFilesPath);
+						cnt++;
+						}
+					
+	
+				}
+				
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("The error occured when trying process doc with name: " + p.getName() );
+					return 0;
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					System.out.println("The error occured when trying process doc with name: " + p.getName() );
+				}
+			}
+			
+			return cnt;
+		}
 		
 	}
 	
 	public static void main(String[] args) throws IOException {
 		
 		
-		String pdfFilesPath = "G:\\Papers\\Journals\\journals\\Programming Languages";
-		String txtFilesPath = "G:\\Papers\\Test_text";
+		String pdfFilesPath = "G:\\Papers\\EEEI";
+		String txtFilesPath = "G:\\Papers\\EEEI_text";
 		
 		
 		int res = 0;
-		res = performConvertToText(pdfFilesPath, txtFilesPath);
+		res = performConvertToText(pdfFilesPath, txtFilesPath,true);
 		if(res != 0)
 		{
 			System.out.print("The program convert successfully  " + res + " documents"); 
