@@ -156,6 +156,9 @@ public class pdfToText {
 		int result;
 		String text;
 		int commas;
+		ReadabilityEndpoint readability = new ReadabilityEndpoint();
+		
+		Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
 		
 		
 		if(hashedNames) //if our files are appeared with md5 hashed names
@@ -167,11 +170,7 @@ public class pdfToText {
 			boolean recursive = true;
 			Collection <File> files = FileUtils.listFiles(root, null, recursive);
 			
-			
-			ReadabilityEndpoint readability = new ReadabilityEndpoint();
-			
-			Map<MetricType, BigDecimal> read_metrics = new HashMap<MetricType, BigDecimal>();
-			
+
 			
 			for (Paper p:papersList) //for each Paper in the list
 			{
@@ -218,7 +217,7 @@ public class pdfToText {
 			}
 			return cnt;
 		}
-		//TODO end the creating of txt file from pdf without DB list and hashed names -  below
+		//TODO add the real name with prefix of ieee in readability and createfile
 		else
 		{
 			File root = new File(pdffilesPath);
@@ -228,14 +227,14 @@ public class pdfToText {
 			for (File f:files) //for each PDF in the list
 			{
 				try {
-				paperName = p.getHashedName();
+				//paperName = p.getHashedName();
 				
-				absoluteFilePath = findAbsolutePath(files,paperHashedName);
-				File file = new File(absoluteFilePath);
-				if (absoluteFilePath!=null)
-				{
+				//absoluteFilePath = findAbsolutePath(files,paperHashedName);
+				//File file = new File(absoluteFilePath);
+				//if (absoluteFilePath!=null)
+				//{
 					
-						text = pdfFileToText(file, p.getName());
+						text = pdfFileToText(f, f.getName());
 						if (text.length()>10) //check that there is any text and the pdf is readable file else we will not process this file 
 						{
 							//readability metrics calculation
@@ -243,29 +242,29 @@ public class pdfToText {
 						
 						
 							//write readability metrics to db
-						readability.writeToDbReadability(read_metrics, p.getName());
+						readability.writeToDbReadability(read_metrics, f.getName());
 						
 							//count commas
 						//commas = countCommas(text);
 						//TODO write to db the commas count
 						
-						result = createTxtFile(text,p.getName(),txtFilesPath);
+						result = createTxtFile(text,f.getName(),txtFilesPath);
 						cnt++;
 						}
 					
 	
-				}
+				//}
 				
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					System.out.println("The error occured when trying process doc with name: " + p.getName() );
+					System.out.println("The error occured when trying process doc with name: " + f.getName() );
 					return 0;
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					System.out.println("The error occured when trying process doc with name: " + p.getName() );
+					System.out.println("The error occured when trying process doc with name: " + f.getName() );
 				}
 			}
 			
