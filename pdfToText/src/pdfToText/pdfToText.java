@@ -217,7 +217,7 @@ public class pdfToText {
 			}
 			return cnt;
 		}
-		//TODO add the real name with prefix of ieee in readability and createfile
+		//TODO add the real name with prefix of ieee in readability and create file
 		else
 		{
 			File root = new File(pdffilesPath);
@@ -241,14 +241,14 @@ public class pdfToText {
 						read_metrics = readability.get(text);
 						
 						
-							//write readability metrics to db
-						readability.writeToDbReadability(read_metrics, f.getName());
+							//write readability metrics to db with DOI = 10.1109+filename.pdf ---->we need to  cut the ".pdf"-----> 10.1109+filename
+						readability.writeToDbReadability(read_metrics, "10.1109/" + f.getName().substring(0, f.getName().length()-4));
 						
 							//count commas
 						//commas = countCommas(text);
 						//TODO write to db the commas count
 						
-						result = createTxtFile(text,f.getName(),txtFilesPath);
+						result = createTxtFile(text,"10.1109/" + f.getName().substring(0, f.getName().length()-4),txtFilesPath);
 						cnt++;
 						}
 					
@@ -275,13 +275,14 @@ public class pdfToText {
 	
 	public static void main(String[] args) throws IOException {
 		
-		
+	//=======================Configurations=================================
 		String pdfFilesPath = "G:\\Papers\\EEEI";
 		String txtFilesPath = "G:\\Papers\\EEEI_text";
-		
+		boolean hashed = false;
+	//======================================================================
 		
 		int res = 0;
-		res = performConvertToText(pdfFilesPath, txtFilesPath,true);
+		res = performConvertToText(pdfFilesPath, txtFilesPath,hashed);
 		if(res != 0)
 		{
 			System.out.print("The program convert successfully  " + res + " documents"); 
