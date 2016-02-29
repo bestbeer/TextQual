@@ -1,4 +1,4 @@
-package pdfToText.vo;
+package DAO.vo;
 
 public class PaperLingQual {
 	

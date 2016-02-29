@@ -2,15 +2,16 @@ package pdfToText.readability.endpoints;
 
 
 import pdfToText.pdfToText;
-import pdfToText.dao.JDBCPaperDAO;
 import pdfToText.readability.engine.Readability;
 import pdfToText.readability.enums.MetricType;
-import pdfToText.vo.Paper;
-import pdfToText.vo.PaperLingQual;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import DAO.dao.JDBCDAO;
+import DAO.vo.Paper;
+import DAO.vo.PaperLingQual;
 
 
 public class ReadabilityEndpoint {
@@ -53,7 +54,7 @@ public class ReadabilityEndpoint {
     	paperLingQual.setWORDS(readabilityMetrics.get(MetricType.WORDS).intValue());
     	paperLingQual.setCOMMAS(readabilityMetrics.get(MetricType.COMMAS).intValue());
     	
-    	JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
+    	JDBCDAO jdbcPaperDAO = new JDBCDAO();
         jdbcPaperDAO.getConnection();
         jdbcPaperDAO.insertLingQual(paperLingQual); //here the logic of which files to read will be in sql query //TODO add result good and fault result
          

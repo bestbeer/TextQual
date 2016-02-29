@@ -1,4 +1,4 @@
-package pdfToText.dao;
+package DAO.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,9 +9,9 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-import pdfToText.vo.*;
+import DAO.vo.*;
 
-public class JDBCPaperDAO implements PaperDAO{
+public class JDBCDAO implements DAO{
 	 Connection connection = null;
 	 
 	    public Connection getConnection(){
@@ -123,7 +123,31 @@ public class JDBCPaperDAO implements PaperDAO{
 	            }
 	            
 	            return papersLingQList;
-	    }  
+	    }
+	    
+	    
+	    @Override
+	    public void insertCollocation(CollocationBiGram collBiGram) {
+	        try {
+	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.collocation_eeei_801_f0_wo_stop_like (doi ,coll1, coll2, likelihood) VALUES (? , ? , ? , ? )");
+	            preparedStatement.setString(1,  collBiGram.getDoi());
+	            preparedStatement.setString(2,  collBiGram.getColl1());
+	            preparedStatement.setString(3,  collBiGram.getColl2());
+	            preparedStatement.setDouble(4,  collBiGram.getLikelihood());
+	            
+	            
+	            preparedStatement.executeUpdate();
+	            preparedStatement.close();
+	        } catch (SQLException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	         
+	    }
+	    
+	    
+	    
+	    
 	    public void closeConnection(){
 	        try {
 	              if (connection != null) {

@@ -18,10 +18,11 @@ import org.apache.pdfbox.lucene.LucenePDFDocument.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.searchengine.*;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.*;
 
-import pdfToText.dao.*;
-import pdfToText.vo.Paper;
+import DAO.dao.*;
+import DAO.vo.Paper;
+
+import org.apache.pdfbox.*;
 
 import pdfToText.readability.endpoints.*;
 import pdfToText.readability.enums.MetricType;
@@ -66,7 +67,7 @@ public class pdfToText {
 	public static List<Paper>  getFilesListToRead()
 	{
 		List <Paper> PapersList = new ArrayList<Paper>();
-		JDBCPaperDAO jdbcPaperDAO = new JDBCPaperDAO();
+		JDBCDAO jdbcPaperDAO = new JDBCDAO();
         jdbcPaperDAO.getConnection();
         PapersList = jdbcPaperDAO.select(); //here the logic of which files to read will be in sql query
          
