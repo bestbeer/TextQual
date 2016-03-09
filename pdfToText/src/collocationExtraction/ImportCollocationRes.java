@@ -28,6 +28,7 @@ public class ImportCollocationRes {
 		Collection <File> files = FileUtils.listFiles(root, null, recursive);
 		BufferedReader data = null;
 		CollocationBiGram coll;
+		double collCorpusLikelihood;
 		String [] strArr;
 		for (File f:files) //for each file in the list
 		{
@@ -41,14 +42,22 @@ public class ImportCollocationRes {
 				while ((s = data.readLine()) != null)
 				{
 					s = s.replace("[", "");
+					s = s.replace("]", "");
 					strArr = s.split(" ");
 					coll = new CollocationBiGram();
 					coll.setDoi(f.getName().substring(0, f.getName().length()-4));
-					coll.setColl1(strArr[0].substring(0, strArr[0].length()-1));
-					coll.setColl2(strArr[1].substring(0, strArr[1].length()-1));
+					coll.setColl1(strArr[0].substring(0, strArr[0].length()-1)); 
+					coll.setColl2(strArr[1].substring(0, strArr[1].length()-1)); 
+//					coll.setColl1((strArr[0].substring(0, strArr[0].length()-1)).replaceAll("\\s+", "")); //also remove all whitespaces and non visible characters
+//					coll.setColl2((strArr[1].substring(0, strArr[1].length()-1)).replaceAll("\\s+", "")); //also remove all whitespaces and non visible characters
 					coll.setLikelihood(Double.parseDouble(strArr[2].substring(0, strArr[2].length())));
+					collCorpusLikelihood = jdbcDAO.selectCollocCorpusLikelihood(coll);
+					
+					
+					coll.setCorpusLikelihood(collCorpusLikelihood);
 					
 					jdbcDAO.insertCollocation(coll);
+					
 				}
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
@@ -68,11 +77,11 @@ public class ImportCollocationRes {
 	
 	public static void main(String[] args) {
 		boolean dir = true; // indicate if we process directory or single file
-		boolean filesReady = true; //indicate if cleared collocation files are redy
+		boolean filesReady = true; //indicate if cleared collocation files are ready
 		String fileToRead = "D:\\Result\\result_wo_stop_28_f0_like.txt";
 		String fileToWrite = "D:\\Result\\result_wo_stop_28_f0_like_clear.txt";
-		String dirToread = "G:\\Papers\\EEEI_Text_Coll";
-		String dirToWrite = "G:\\Papers\\EEEI_Text_Coll_clear";
+		String dirToread = "G:\\Papers\\Collocation Papers\\High Quality Text\\Coll_Text";
+		String dirToWrite = "G:\\Papers\\Collocation Papers\\High Quality Text\\Coll_Text_Clear";
 		
 		try{
 			if(dir==false) //if we just need to parse one file without entering collocations to DB
@@ -97,9 +106,9 @@ public class ImportCollocationRes {
 				writer.close();
 		
 			}
-			else
+			else //working with Directory of files
 			{
-				if(filesReady == false)
+				if(filesReady == false) //the collocation files are need to be processed
 				{
 					File root = new File(dirToread);
 					boolean recursive = true;
@@ -128,6 +137,8 @@ public class ImportCollocationRes {
 						writer.close();
 						
 					}
+					
+						InsertToDb(dirToWrite);
 				}
 				else //files are ready just insert to DB
 				{

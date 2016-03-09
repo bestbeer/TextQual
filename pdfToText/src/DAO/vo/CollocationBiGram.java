@@ -5,8 +5,17 @@ public class CollocationBiGram {
 	String coll1;
     String coll2;
     double likelihood;
+    double corpusLikelihood;
     
-    public String getDoi() {
+    public double getCorpusLikelihood() {
+		return corpusLikelihood;
+	}
+
+	public void setCorpusLikelihood(double corpusLikelihood) {
+		this.corpusLikelihood = corpusLikelihood;
+	}
+
+	public String getDoi() {
         return doi;
     }
  

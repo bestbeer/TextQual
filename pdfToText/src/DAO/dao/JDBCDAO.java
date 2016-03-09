@@ -129,11 +129,24 @@ public class JDBCDAO implements DAO{
 	    @Override
 	    public void insertCollocation(CollocationBiGram collBiGram) {
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.collocation_eeei_801_f0_wo_stop_like (doi ,coll1, coll2, likelihood) VALUES (? , ? , ? , ? )");
-	            preparedStatement.setString(1,  collBiGram.getDoi());
-	            preparedStatement.setString(2,  collBiGram.getColl1());
-	            preparedStatement.setString(3,  collBiGram.getColl2());
-	            preparedStatement.setDouble(4,  collBiGram.getLikelihood());
+	        	PreparedStatement preparedStatement;
+	        	if (collBiGram.getCorpusLikelihood()!=-1)	//if we found Big corpus likelihood of this collocation
+	        	{
+		            preparedStatement = connection.prepareStatement("INSERT INTO papers.collocation_acm_801_f0_wo_stop_like (doi ,coll1, coll2, likelihood, corpus_likelihood) VALUES (? , ? , ? , ? , ? )");
+		            preparedStatement.setString(1,  collBiGram.getDoi());
+		            preparedStatement.setString(2,  collBiGram.getColl1());
+		            preparedStatement.setString(3,  collBiGram.getColl2());
+		            preparedStatement.setDouble(4,  collBiGram.getLikelihood());
+		            preparedStatement.setDouble(5, collBiGram.getCorpusLikelihood());
+	        	}
+	        	else
+	        	{
+	        		preparedStatement = connection.prepareStatement("INSERT INTO papers.collocation_acm_801_f0_wo_stop_like (doi ,coll1, coll2, likelihood) VALUES (? , ? , ? , ? )");
+		            preparedStatement.setString(1,  collBiGram.getDoi());
+		            preparedStatement.setString(2,  collBiGram.getColl1());
+		            preparedStatement.setString(3,  collBiGram.getColl2());
+		            preparedStatement.setDouble(4,  collBiGram.getLikelihood());
+	        	}
 	            
 	            
 	            preparedStatement.executeUpdate();
@@ -143,6 +156,37 @@ public class JDBCDAO implements DAO{
 	            e.printStackTrace();
 	        }
 	         
+	    }
+	    
+	    public double selectCollocCorpusLikelihood(CollocationBiGram collBiGram)
+	    {
+	    	 String coll1 = collBiGram.getColl1();
+	    	 String coll2 = collBiGram.getColl2();
+	    	 coll2 = " " + coll2; //==========because of problematic space in coll2 field in the table --> in correct circumstances need to be deleted============
+	    	 double likelihood = -1;
+	    	 
+	    	 try{
+	    		 
+	    		 PreparedStatement preparedStatement = connection.prepareStatement("Select likelihood from collocation_testcrp_28_f0_wo_stop_like where coll1 = ? and coll2 = ?");
+	    		 preparedStatement.setString(1,  coll1);
+		         preparedStatement.setString(2,  coll2);
+		         
+		         ResultSet rs = preparedStatement.executeQuery();  
+		        
+		        while (rs.next()) {
+
+						likelihood = rs.getDouble("likelihood");
+						
+		         }	
+		         preparedStatement.close();
+
+	    	 }
+	    	 catch (Exception e)
+	    	 {
+	    		 
+	    	 }
+	    	 
+	    	 return likelihood;
 	    }
 	    
 	    

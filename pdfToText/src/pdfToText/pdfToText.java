@@ -29,6 +29,25 @@ import pdfToText.readability.enums.MetricType;
 
 public class pdfToText {
 	
+	public static void main(String[] args) throws IOException {
+		
+		//=======================Configurations=================================
+			String pdfFilesPath = "G:\\Papers\\Collocation Papers\\Low Quality Papers\\EEEI_till_2007";
+			String txtFilesPath = "G:\\Papers\\Collocation Papers\\Low Quality Papers\\EEEI_till_2007_text";
+			boolean hashed = true;
+		//======================================================================
+			
+			int res = 0;
+			res = performConvertToText(pdfFilesPath, txtFilesPath,hashed);
+			if(res != 0)
+			{
+				System.out.print("The program convert successfully  " + res + " documents"); 
+			}
+			else 
+				System.out.print("The program wasn't finish successfully  " + res); 
+	}
+	
+	
 	
 	public static int createTxtFile(String text, String fileName, String path) throws IOException
 	{
@@ -274,22 +293,6 @@ public class pdfToText {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		
-	//=======================Configurations=================================
-		String pdfFilesPath = "G:\\Papers\\EEEI";
-		String txtFilesPath = "G:\\Papers\\EEEI_text";
-		boolean hashed = false;
-	//======================================================================
-		
-		int res = 0;
-		res = performConvertToText(pdfFilesPath, txtFilesPath,hashed);
-		if(res != 0)
-		{
-			System.out.print("The program convert successfully  " + res + " documents"); 
-		}
-		else 
-			System.out.print("The program wasn't finish successfully  " + res); 
-	}
+	
 
 }
