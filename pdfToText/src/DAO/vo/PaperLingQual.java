@@ -3,6 +3,9 @@ package DAO.vo;
 public class PaperLingQual {
 	
 	String doi;
+	String filename;
+	
+
 	double SMOG;
 	double FLESCH_READING;
 	double FLESCH_KINCAID;
@@ -22,6 +25,13 @@ public class PaperLingQual {
 	}
 	public void setDoi(String doi) {
 		this.doi = doi;
+	}
+	
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 	public double getSMOG() {
 		return SMOG;

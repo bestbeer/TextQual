@@ -37,9 +37,16 @@ public class ReadabilityEndpoint {
     
     public void writeToDbReadability (Map<MetricType, BigDecimal> readabilityMetrics, String doi)
     {
+    	String filename = doi.toString();
+    	filename = filename.replaceAll("/", ".");
+		filename = filename.replaceAll("<", ".");
+		filename = filename.replaceAll(">", ".");
+		filename = filename.replaceAll(":", ".");
+    	
     	//will read all the txt files in the dir and write to the DB Table the readability results per DOI
     	PaperLingQual paperLingQual = new PaperLingQual();
     	paperLingQual.setDoi(doi);
+    	paperLingQual.setFilename(filename);
     	paperLingQual.setARI(readabilityMetrics.get(MetricType.ARI).doubleValue());
     	paperLingQual.setCHARACTERS(readabilityMetrics.get(MetricType.CHARACTERS).intValue());
     	paperLingQual.setCOLEMAN_LIAU(readabilityMetrics.get(MetricType.COLEMAN_LIAU).doubleValue());
@@ -53,6 +60,7 @@ public class ReadabilityEndpoint {
     	paperLingQual.setSYLLABLES(readabilityMetrics.get(MetricType.SYLLABLES).intValue());
     	paperLingQual.setWORDS(readabilityMetrics.get(MetricType.WORDS).intValue());
     	paperLingQual.setCOMMAS(readabilityMetrics.get(MetricType.COMMAS).intValue());
+    	
     	
     	JDBCDAO jdbcPaperDAO = new JDBCDAO();
         jdbcPaperDAO.getConnection();

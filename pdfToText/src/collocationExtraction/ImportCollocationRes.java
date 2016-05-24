@@ -17,7 +17,7 @@ public class ImportCollocationRes {
 		// TODO Auto-generated constructor stub
 		
 	}
-	public static int InsertToDb(String filesDir)
+	public static int InsertToDb(String filesDir,String tblName)
 	{
 		//TODO read the files and run a double loop -- all files ---> all collocations in each file
 		JDBCDAO jdbcDAO = new JDBCDAO();
@@ -56,7 +56,7 @@ public class ImportCollocationRes {
 					
 					coll.setCorpusLikelihood(collCorpusLikelihood);
 					
-					jdbcDAO.insertCollocation(coll);
+					jdbcDAO.insertCollocation(coll,tblName);
 					
 				}
 			} catch (NumberFormatException e) {
@@ -77,19 +77,19 @@ public class ImportCollocationRes {
 	
 	public static void main(String[] args) {
 		boolean dir = true; // indicate if we process directory or single file
-		boolean filesReady = true; //indicate if cleared collocation files are ready
+		boolean filesReady = false; //indicate if cleared collocation files are ready
 		String fileToRead = "D:\\Result\\result_wo_stop_28_f0_like.txt";
 		String fileToWrite = "D:\\Result\\result_wo_stop_28_f0_like_clear.txt";
-		String dirToread = "G:\\Papers\\Collocation Papers\\High Quality Text\\Coll_Text";
-		String dirToWrite = "G:\\Papers\\Collocation Papers\\High Quality Text\\Coll_Text_Clear";
-		
+		String dirToread = "G:\\Papers\\Collocation Papers\\Low Quality Papers\\CAIDCD_coll"; //directory to read collocations from NLTK files
+		String dirToWrite = "G:\\Papers\\Collocation Papers\\Low Quality Papers\\CAIDCD_coll_clear"; //directory to write cleared text files with collocations from NLTK files
+		String collocationTableName =  "collocation_CAIDCD_1243_f0_wo_stop_like";
 		try{
 			if(dir==false) //if we just need to parse one file without entering collocations to DB
 			{
 			
 				// TODO Auto-generated method stub
-				File file = new File("D:\\Result\\result_wo_stop_28_f0_like.txt");
-				File file2 = new File("D:\\Result\\result_wo_stop_28_f0_like_clear.txt");
+				File file = new File(fileToRead);
+				File file2 = new File(fileToWrite);
 				file2.createNewFile();
 				BufferedWriter writer  = new BufferedWriter(new FileWriter(file2));
 		
@@ -138,11 +138,11 @@ public class ImportCollocationRes {
 						
 					}
 					
-						InsertToDb(dirToWrite);
+						InsertToDb(dirToWrite, collocationTableName);
 				}
 				else //files are ready just insert to DB
 				{
-						InsertToDb(dirToWrite);
+						InsertToDb(dirToWrite, collocationTableName);
 				}
 			}
 				

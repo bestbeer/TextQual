@@ -48,21 +48,22 @@ public class JDBCDAO implements DAO{
 	    @Override
 	    public void insertLingQual(PaperLingQual paperLingQual) {
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.lexical_quality (doi ,smog, flesch_reading, flesch_kincaid, ari, gunning_fog, coleman_liau, smog_index, characters, syllables, words, complexwords, sentences, commas) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)");
+	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO papers.lexical_quality (doi, filename ,smog, flesch_reading, flesch_kincaid, ari, gunning_fog, coleman_liau, smog_index, characters, syllables, words, complexwords, sentences, commas) VALUES (? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)");
 	            preparedStatement.setString(1,  paperLingQual.getDoi());
-	            preparedStatement.setDouble(2,  paperLingQual.getSMOG());
-	            preparedStatement.setDouble(3,  paperLingQual.getFLESCH_READING());
-	            preparedStatement.setDouble(4,  paperLingQual.getFLESCH_KINCAID());
-	            preparedStatement.setDouble(5,  paperLingQual.getARI());
-	            preparedStatement.setDouble(6,  paperLingQual.getGUNNING_FOG());
-	            preparedStatement.setDouble(7,  paperLingQual.getCOLEMAN_LIAU());
-	            preparedStatement.setDouble(8,  paperLingQual.getSMOG_INDEX());
-	            preparedStatement.setInt(9,  paperLingQual.getCHARACTERS());
-	            preparedStatement.setInt(10,  paperLingQual.getSYLLABLES());
-	            preparedStatement.setInt(11,  paperLingQual.getWORDS());
-	            preparedStatement.setInt(12,  paperLingQual.getCOMPLEXWORDS());
-	            preparedStatement.setInt(13,  paperLingQual.getSENTENCES());
-	            preparedStatement.setInt(14,  paperLingQual.getCOMMAS());
+	            preparedStatement.setString(2, paperLingQual.getFilename());
+	            preparedStatement.setDouble(3,  paperLingQual.getSMOG());
+	            preparedStatement.setDouble(4,  paperLingQual.getFLESCH_READING());
+	            preparedStatement.setDouble(5,  paperLingQual.getFLESCH_KINCAID());
+	            preparedStatement.setDouble(6,  paperLingQual.getARI());
+	            preparedStatement.setDouble(7,  paperLingQual.getGUNNING_FOG());
+	            preparedStatement.setDouble(8,  paperLingQual.getCOLEMAN_LIAU());
+	            preparedStatement.setDouble(9,  paperLingQual.getSMOG_INDEX());
+	            preparedStatement.setInt(10,  paperLingQual.getCHARACTERS());
+	            preparedStatement.setInt(11,  paperLingQual.getSYLLABLES());
+	            preparedStatement.setInt(12,  paperLingQual.getWORDS());
+	            preparedStatement.setInt(13,  paperLingQual.getCOMPLEXWORDS());
+	            preparedStatement.setInt(14,  paperLingQual.getSENTENCES());
+	            preparedStatement.setInt(15,  paperLingQual.getCOMMAS());
 	            
 	            preparedStatement.executeUpdate();
 	            preparedStatement.close();
@@ -74,13 +75,14 @@ public class JDBCDAO implements DAO{
 	    }
 	    
 	    @Override
-	    public List<Paper> select() {
+	    public List<Paper> select(String query ) {
 	        List<Paper> papers = new LinkedList<Paper>();
 	         try {
 	                Statement statement = connection.createStatement();
 	              //TODO add the stored procedure exec statement that will bring the list of papers
-	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.down_journals_md5;"); //here we will put relevant view to select from in order to select list of downloaded papers for our specific directory - not all files were downloaded so we not processed not downloaded files 
-	                 
+	                //ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.map_doi_md5 where doi like '10.1109/eeei%';"); //here we will put relevant view to select from in order to select list of downloaded papers for our specific directory - not all files were downloaded so we not processed not downloaded files
+	                ResultSet resultSet = statement.executeQuery("SELECT * FROM papers.map_doi_md5 where doi like '10.1145%';");
+	                
 	                Paper paper = null;
 	                while(resultSet.next()){
 	                    paper = new Paper();
@@ -127,12 +129,12 @@ public class JDBCDAO implements DAO{
 	    
 	    
 	    @Override
-	    public void insertCollocation(CollocationBiGram collBiGram) {
+	    public void insertCollocation(CollocationBiGram collBiGram, String tblName) {
 	        try {
 	        	PreparedStatement preparedStatement;
 	        	if (collBiGram.getCorpusLikelihood()!=-1)	//if we found Big corpus likelihood of this collocation
 	        	{
-		            preparedStatement = connection.prepareStatement("INSERT INTO papers.collocation_acm_801_f0_wo_stop_like (doi ,coll1, coll2, likelihood, corpus_likelihood) VALUES (? , ? , ? , ? , ? )");
+		            preparedStatement = connection.prepareStatement("INSERT INTO papers." + tblName + " (doi ,coll1, coll2, likelihood, corpus_likelihood) VALUES (? , ? , ? , ? , ? )");
 		            preparedStatement.setString(1,  collBiGram.getDoi());
 		            preparedStatement.setString(2,  collBiGram.getColl1());
 		            preparedStatement.setString(3,  collBiGram.getColl2());
@@ -141,7 +143,7 @@ public class JDBCDAO implements DAO{
 	        	}
 	        	else
 	        	{
-	        		preparedStatement = connection.prepareStatement("INSERT INTO papers.collocation_acm_801_f0_wo_stop_like (doi ,coll1, coll2, likelihood) VALUES (? , ? , ? , ? )");
+	        		preparedStatement = connection.prepareStatement("INSERT INTO papers." + tblName  + " (doi ,coll1, coll2, likelihood) VALUES (? , ? , ? , ? )");
 		            preparedStatement.setString(1,  collBiGram.getDoi());
 		            preparedStatement.setString(2,  collBiGram.getColl1());
 		            preparedStatement.setString(3,  collBiGram.getColl2());

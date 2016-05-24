@@ -32,13 +32,16 @@ public class pdfToText {
 	public static void main(String[] args) throws IOException {
 		
 		//=======================Configurations=================================
-			String pdfFilesPath = "G:\\Papers\\Collocation Papers\\Low Quality Papers\\EEEI_till_2007";
-			String txtFilesPath = "G:\\Papers\\Collocation Papers\\Low Quality Papers\\EEEI_till_2007_text";
-			boolean hashed = true;
+			String pdfFilesPath = "D:\\Qualified_Corpus\\not_unified\\pdf\\ACM";
+			String txtFilesPath = "D:\\Qualified_Corpus\\not_unified\\text\\ACM";
+			
+			boolean hashed = true; //if file's names are in md5 hashed or regular names
+			String fileListQuery = "SELECT * FROM papers.map_doi_md5 where doi like '10.1145%';"; //if there is hashed file names we will need the real file names list
+			//"SELECT * FROM papers.map_doi_md5 where doi like '10.1109/eeei%';"
 		//======================================================================
 			
 			int res = 0;
-			res = performConvertToText(pdfFilesPath, txtFilesPath,hashed);
+			res = performConvertToText(pdfFilesPath, txtFilesPath,fileListQuery,hashed);
 			if(res != 0)
 			{
 				System.out.print("The program convert successfully  " + res + " documents"); 
@@ -83,12 +86,12 @@ public class pdfToText {
 			return 1;
 	}
 	
-	public static List<Paper>  getFilesListToRead()
+	public static List<Paper>  getFilesListToRead(String query)
 	{
 		List <Paper> PapersList = new ArrayList<Paper>();
 		JDBCDAO jdbcPaperDAO = new JDBCDAO();
         jdbcPaperDAO.getConnection();
-        PapersList = jdbcPaperDAO.select(); //here the logic of which files to read will be in sql query
+        PapersList = jdbcPaperDAO.select(query); //here the logic of which files to read will be in sql query
          
         jdbcPaperDAO.closeConnection();
         
@@ -162,7 +165,7 @@ public class pdfToText {
 	}
 	
 	/** Converts files from pdf to text by path, hashedNames will idicate if the names of the pdf files are appeared in MD5 hash or false if regular names */
-	public static int performConvertToText(String pdffilesPath, String txtFilesPath, boolean hashedNames)
+	public static int performConvertToText(String pdffilesPath, String txtFilesPath, String fileListQuery, boolean hashedNames)
 	{
 		
 		//will convert to text and calculate the metrics and save them
@@ -184,7 +187,7 @@ public class pdfToText {
 		if(hashedNames) //if our files are appeared with md5 hashed names
 		{
 			List<Paper> papersList = new ArrayList<Paper>();
-			papersList = getFilesListToRead(); //get files list from DB
+			papersList = getFilesListToRead(fileListQuery); //get files list from DB
 			
 			File root = new File(pdffilesPath);
 			boolean recursive = true;
@@ -238,7 +241,7 @@ public class pdfToText {
 			return cnt;
 		}
 		//TODO add the real name with prefix of ieee in readability and create file
-		else
+		else //not hashed filenames
 		{
 			File root = new File(pdffilesPath);
 			boolean recursive = true;
